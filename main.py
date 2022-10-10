@@ -7,9 +7,12 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import pandas as pd
+from selenium.webdriver.chrome.options import Options
 
 
 def rentler():
+    options = Options()
+    options.headless = True
     driver = webdriver.Chrome("C:\chromedriver/chromedriver.exe")
     prices = []
     addresses = []
@@ -32,6 +35,7 @@ def rentler():
             addresses.append('No display data')
     df = pd.DataFrame({'Address': addresses, 'Price': prices})
     df.to_csv('rentlerListings.csv', index=False, encoding='utf-8')
+    driver.quit()
 
 
 def redfin():
@@ -57,5 +61,8 @@ def redfin():
             addresses.append('No display data')
     df = pd.DataFrame({'Address': addresses, 'Price': prices})
     df.to_csv('redfinListings.csv', index=False, encoding='utf-8')
+    driver.quit()
+
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
+rentler()
 redfin()
