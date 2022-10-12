@@ -1,3 +1,4 @@
+import json
 class Listing:
     def __init__(self, address, price, link, pic):
         self.address = address
