@@ -46,14 +46,13 @@ def rentler():
 def redfin():
     driver = webdriver.Chrome("C:\chromedriver/chromedriver.exe")
     listingArr = []
-    driver.get('https://www.redfin.com/zipcode/84102')
-
+    driver.get('https://www.redfin.com/zipcode/84102/apartments-for-rent')
     urlHeader = 'https://www.redfin.com'
     content = driver.page_source
     soup = BeautifulSoup(content, features='html.parser')
-    for element in soup.findAll('div', attrs={'class': 'HomeCardContainer defaultSplitMapListView'}):
+    for element in soup.findAll('div', attrs={'class': 'HomeCardContainer defaultSplitMapListView isRentals'}):
         price = element.find('span', attrs={'class': 'homecardV2Price'})
-        address = element.find('span', attrs={'class': 'collapsedAddress primaryLine'})
+        address = element.find('span', attrs={'class': 'fullAddress'})
         stats = element.find('div', attrs={'class': 'HomeStatsV2 font-size-small'})
         bedrooms = stats.contents[0]
         bathrooms = stats.contents[1]
