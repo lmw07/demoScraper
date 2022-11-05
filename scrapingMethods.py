@@ -20,11 +20,12 @@ def RedfinZipSearch(zipcode):
     params = {"api_key": "Jbdkg6N2W1QEtw2JFs84CmfCeOozu4Nj",
               "url": f'https://www.redfin.com/zipcode/{zipcode}/apartments-for-rent'}
     response = requests.request('GET', base_url, params=params)
+    if response.status_code == 403:
+        return '[]'
     content = response.text
     soup = BeautifulSoup(content, features='html.parser')
     soup = BeautifulSoup(content, features='html.parser')
-    if response.status_code == 200:
-        elements = soup.findAll('div', attrs={'class': 'HomeCardContainer defaultSplitMapListView isRentals'})
+    elements = soup.findAll('div', attrs={'class': 'HomeCardContainer defaultSplitMapListView isRentals'})
     elements.append(soup.findAll('div', attrs={'class': 'HomeCardContainer selectedHomeCard defaultSplitMapListView isRentals'})[0])
     for element in elements:
         price = element.find('span', attrs={'class': 'homecardV2Price'})
@@ -50,4 +51,4 @@ def RedfinZipSearch(zipcode):
     res = json.dumps(listingArr, default=vars)
     return res
 
-print(RedfinZipSearch(84102))
+print(RedfinZipSearch(64801))

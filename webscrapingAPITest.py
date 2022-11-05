@@ -38,7 +38,7 @@ def redfin():
     listings = []
     base_url = 'https://api.webscrapingapi.com/v1'
     params = {"api_key": "Jbdkg6N2W1QEtw2JFs84CmfCeOozu4Nj",
-              "url": 'https://www.redfin.com/zipcode/84101'}
+              "url": 'https://www.redfin.com/zipcode/84101', "timeout": "15000"}
     response = requests.request('GET', base_url, params=params)
     content = response.text
     soup = BeautifulSoup(content, features='html.parser')
@@ -59,7 +59,13 @@ def redfin():
     with open("redfinListings.json", "w") as write_file:
         json.dump(listings, write_file)
 
+def pythonAnywhere(zipcode):
+    baseUrl = 'http://lm07.pythonanywhere.com/'
+    response = requests.request('GET', baseUrl)
+    print(response.text)
+
 
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
-redfin()
+#redfin()
+pythonAnywhere(64801)
