@@ -1,6 +1,9 @@
 from pykml import parser
+import json
 import os
 import math
+import threading
+import time
 def CoordinateMath(arrayOne, arrayTwo):
     """
     outarray = []
@@ -87,7 +90,7 @@ arr2 =[-82.213418,32.230748,0.0 -82.213683,32.229224,0.0 -82.210902,32.226812,0.
 
 #print(CoordinateMath(StringToNumArray(GrabCoordinates(r'C:\Users\14172\Downloads\all-zips\zip30912.kml').text),StringToNumArray(GrabCoordinates(r'C:\Users\14172\Downloads\all-zips\zip84101.kml').text)))
 
-
+print(time.time_ns())
 fileArr = []
 directory = r'C:\Users\14172\Downloads\all-zips'
 #put files in array
@@ -96,21 +99,52 @@ for filename in os.listdir(directory):
     #string = f[-9:]
     fileArr.append(f)
 
-#coord checking
-fileDic = dict()
-for i in range(10000, 10020, 1):
-    arr = []
-    if i >= 200:
-        for j in range(i-200, i-1, 1):
-            if  8 > CoordinateMath(StringToNumArray(GrabCoordinates(fileArr[i]).text),StringToNumArray(GrabCoordinates(fileArr[j]).text)):
+def driver(num1, num2):
+    #coord checking
+    fileDic = dict()
+    for i in range(num1, num2,1):
+        arr = []
+        for j in range(0,len(fileArr),1):
+            if 20 > CoordinateMath(StringToNumArray(GrabCoordinates(fileArr[i]).text),StringToNumArray(GrabCoordinates(fileArr[j]).text)):
                 arr.append(fileArr[j][-9:])
-    if i <= len(fileArr) - 200:
-        for j in range(i+1, i+200, 1):
-            if  8 > CoordinateMath(StringToNumArray(GrabCoordinates(fileArr[i]).text),StringToNumArray(GrabCoordinates(fileArr[j]).text)):
-                arr.append(fileArr[j][-9:])
-    zipcode = fileArr[i][-9:]
-    fileDic.update({zipcode: arr})
-    print(fileDic.get(zipcode))
+
+        zipcode = fileArr[i][-9:]
+        fileDic.update({zipcode: arr})
+        print(i)
+        #print(threading.Thread.name)
+        #print(time.time_ns())
+
+t1 = threading.Thread(target=driver, args=(0, 1))
+t2 = threading.Thread(target=driver, args=(1, 2))
+t3 = threading.Thread(target=driver, args=(2, 3))
+t4 = threading.Thread(target=driver, args=(3, 4))
+t5 = threading.Thread(target=driver, args=(4, 5))
+t6 = threading.Thread(target=driver, args=(5, 6))
+t7 = threading.Thread(target=driver, args=(6, 7))
+t8 = threading.Thread(target=driver, args=(7, 8))
+t1.start()
+t2.start()
+t3.start()
+t4.start()
+t5.start()
+t6.start()
+t7.start()
+t8.start()
+t1.join()
+t2.join()
+t3.join()
+t4.join()
+t5.join()
+t6.join()
+t7.join()
+t8.join()
+totalFileDic = dict()
+with open("zipmap.json", "w") as write_file:
+    json.dump(totalFileDic, write_file)
+print(time.time_ns())
+#outString = json.dumps(fileDic)
+#print(outString)
+    #print(fileDic.get(zipcode))
 #len(fileArr) -1
 
 
