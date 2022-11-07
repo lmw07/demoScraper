@@ -54,6 +54,17 @@ def CoordinateMath(arrayOne, arrayTwo):
     #print(meanDiff)
     #return meanDiff[0] < 0.1 and meanDiff[1]< 0.1
 
+def longitudeCalc(coordArray):
+    yarr = []
+    for num in coordArray:
+        yarr.append(float(num[0]))
+    y1count = 0;
+    for num in yarr:
+        y1count = y1count + num
+    y1count = y1count / len(yarr)
+    return y1count
+
+
 
 
 def GrabCoordinates(filename):
@@ -113,7 +124,7 @@ def driver(num1, num2):
         print(i)
         #print(threading.Thread.name)
         #print(time.time_ns())
-
+'''
 t1 = threading.Thread(target=driver, args=(0, 1))
 t2 = threading.Thread(target=driver, args=(1, 2))
 t3 = threading.Thread(target=driver, args=(2, 3))
@@ -146,5 +157,55 @@ print(time.time_ns())
 #print(outString)
     #print(fileDic.get(zipcode))
 #len(fileArr) -1
+'''
+fileLongArr = []
+count = len(fileArr)
+for file in fileArr:
+    longitude = longitudeCalc(StringToNumArray(GrabCoordinates(file).text))
+    fileset = [file, longitude]
+    fileLongArr.append(fileset)
+    #print(count)
+    count = count -1
+fileLongArr.sort(key=lambda setL: setL[1])
 
+filesToLookAtDic = dict()
+count = 0
+for thing in fileLongArr:
+    arr = []
+    for i in range(len(fileLongArr)):
+        if abs(abs(thing[1]) - abs(fileLongArr[i][1])) <= 1:
+            arr.append(fileLongArr[i][0])
+    filesToLookAtDic.update({thing[0]: arr})
+    print(count)
+    count = count +1
+with open("zipmap.json", "w") as write_file:
+    json.dump(filesToLookAtDic, write_file)
+r'''
+print(fileLongArr[0][1])
+print(fileLongArr[0][0])
+print(fileLongArr[1][1])
+print(fileLongArr[1][0])
+print(fileLongArr[2][1])
+print(fileLongArr[2][0])
+print(fileLongArr[10000][1])
+for thing in fileLongArr:
+    print(thing[0] + ' '+ str(thing[1]))
 
+print(StringToNumArray(GrabCoordinates(r'C:\Users\14172\Downloads\all-zips\zip99929.kml').text))
+print(longitudeCalc(StringToNumArray(GrabCoordinates(r'C:\Users\14172\Downloads\all-zips\zip99929.kml').text)))
+'''
+fileDic = dict()
+def driver2():
+    #coord checking
+    for x in filesToLookAtDic:
+        temparr = []
+        for item in filesToLookAtDic[x]:
+            distance = CoordinateMath(StringToNumArray(GrabCoordinates(x).text),StringToNumArray(GrabCoordinates(item).text))
+            if distance < 20:
+                temparr.append(item[-9])
+        zipcode = x[-9]
+        fileDic.update({zipcode: temparr})
+        print(x)
+    with open("zipmap2.json", "w") as write_file:
+            json.dump(fileDic, write_file)
+driver2()
