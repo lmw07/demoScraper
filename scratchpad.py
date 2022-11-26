@@ -102,6 +102,7 @@ arr2 =[-82.213418,32.230748,0.0 -82.213683,32.229224,0.0 -82.210902,32.226812,0.
 #print(CoordinateMath(StringToNumArray(GrabCoordinates(r'C:\Users\14172\Downloads\all-zips\zip30912.kml').text),StringToNumArray(GrabCoordinates(r'C:\Users\14172\Downloads\all-zips\zip84101.kml').text)))
 
 print(time.time_ns())
+r'''
 fileArr = []
 directory = r'C:\Users\14172\Downloads\all-zips'
 #put files in array
@@ -109,7 +110,8 @@ for filename in os.listdir(directory):
     f = os.path.join(directory, filename)
     #string = f[-9:]
     fileArr.append(f)
-
+'''
+'''
 def driver(num1, num2):
     #coord checking
     fileDic = dict()
@@ -124,6 +126,7 @@ def driver(num1, num2):
         print(i)
         #print(threading.Thread.name)
         #print(time.time_ns())
+        '''
 '''
 t1 = threading.Thread(target=driver, args=(0, 1))
 t2 = threading.Thread(target=driver, args=(1, 2))
@@ -157,7 +160,7 @@ print(time.time_ns())
 #print(outString)
     #print(fileDic.get(zipcode))
 #len(fileArr) -1
-'''
+
 fileLongArr = []
 count = len(fileArr)
 for file in fileArr:
@@ -180,6 +183,7 @@ for thing in fileLongArr:
     count = count +1
 with open("zipmap.json", "w") as write_file:
     json.dump(filesToLookAtDic, write_file)
+    '''
 r'''
 print(fileLongArr[0][1])
 print(fileLongArr[0][0])
@@ -197,15 +201,22 @@ print(longitudeCalc(StringToNumArray(GrabCoordinates(r'C:\Users\14172\Downloads\
 fileDic = dict()
 def driver2():
     #coord checking
-    for x in filesToLookAtDic:
+    with open("zipmap.json") as read_file:
+        temp = json.load(read_file)
+    count = 1
+    for x in temp:
         temparr = []
-        for item in filesToLookAtDic[x]:
+        percentageDone = count/331
+        print(percentageDone)
+        count = count + 1
+        for item in temp[x]:
             distance = CoordinateMath(StringToNumArray(GrabCoordinates(x).text),StringToNumArray(GrabCoordinates(item).text))
             if distance < 20:
-                temparr.append(item[-9])
-        zipcode = x[-9]
+                temparr.append(item[-9:])
+        zipcode = x[-9:]
         fileDic.update({zipcode: temparr})
         print(x)
     with open("zipmap2.json", "w") as write_file:
             json.dump(fileDic, write_file)
 driver2()
+json.loads("zipmaps2.json")
