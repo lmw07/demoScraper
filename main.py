@@ -11,6 +11,11 @@ from selenium.webdriver.chrome.options import Options
 import json
 def getNums(string):
     numberString = (''.join(filter(str.isdigit, string)))
+    if len(numberString) > 4:
+        firstNum = numberString[0:4]
+        secondNum = numberString[4:len(numberString):1]
+        print(numberString)
+        return str(firstNum + "-" + secondNum)
     if len(numberString) > 0:
         return int(numberString)
     return "Not Given"

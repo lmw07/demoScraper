@@ -74,7 +74,7 @@ def GrabCoordinates(filename):
         coordinateArray = root.Document.Placemark.Polygon.outerBoundaryIs.LinearRing.coordinates
     except:
         coordinateArray = root.Document.Placemark.MultiGeometry.Polygon.outerBoundaryIs.LinearRing.coordinates
-    return coordinateArray
+    return coordinateArray.text
 #GrabCoordinates(r'C:\Users\14172\Downloads\all-zips\zip84101.kml')
 def StringToNumArray(string):
     #strNew = string.replace('-', '')
@@ -218,5 +218,5 @@ def driver2():
         print(x)
     with open("zipmap2.json", "w") as write_file:
             json.dump(fileDic, write_file)
-driver2()
-json.loads("zipmaps2.json")
+#driver2()
+#json.loads("zipmaps2.json")
